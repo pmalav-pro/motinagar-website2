@@ -1,0 +1,2623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMS - MOTINAGAR-2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .form-body {
+            padding: 35px 30px;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .role-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .role-option:hover {
+            background: #f0f4ff;
+        }
+
+        .role-option.active {
+            background: #e8f0fe;
+            border-color: #2a5298;
+            color: #2a5298;
+            font-weight: 600;
+        }
+
+        .role-option input[type="radio"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: #2a5298;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
+        }
+
+        .form-control.error {
+            border-color: #dc3545;
+            background-color: #fff5f5;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 13px;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .password-toggle:hover {
+            color: #2a5298;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2a5298;
+        }
+
+        .checkbox-wrapper label {
+            cursor: pointer;
+            font-size: 14px;
+            color: #555;
+            user-select: none;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(42, 82, 152, 0.3);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .btn-login.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn-login .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .btn-login.loading .spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .notice {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .maintenance-notice {
+            margin-top: 15px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .maintenance-notice .warning-icon {
+            color: #856404;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .maintenance-notice p {
+            font-size: 13px;
+            color: #856404;
+            line-height: 1.5;
+        }
+
+        .maintenance-notice strong {
+            color: #d35400;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .footer p {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            animation: slideInRight 0.4s ease-out;
+            border-left: 4px solid;
+            max-width: 350px;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast.success {
+            border-left-color: #28a745;
+        }
+
+        .toast.error {
+            border-left-color: #dc3545;
+        }
+
+        .toast.info {
+            border-left-color: #17a2b8;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast-content h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        .toast-content p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h2 {
+            font-size: 20px;
+        }
+
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .dashboard-body {
+            padding: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border-left: 4px solid #2a5298;
+        }
+
+        .stat-card h3 {
+            font-size: 28px;
+            color: #2a5298;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .add-form {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .add-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .add-form-grid .form-group {
+            margin-bottom: 0;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .members-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .members-table th,
+        .members-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .members-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .members-table td {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .members-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-admin {
+            background: #e8f0fe;
+            color: #2a5298;
+        }
+
+        .badge-member {
+            background: #e6f4ea;
+            color: #28a745;
+        }
+
+        /* BLUE TICK VERIFIED BADGE */
+        .blue-tick {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: #1DA1F2;
+            border-radius: 50%;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 6px;
+            vertical-align: middle;
+            box-shadow: 0 2px 4px rgba(29, 161, 242, 0.3);
+            animation: tickPulse 2s infinite;
+        }
+
+        @keyframes tickPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .paid-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #c8e6c9;
+        }
+
+        .paid-badge .blue-tick {
+            margin-left: 0;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+        }
+
+        .unpaid-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffebee;
+            color: #c62828;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #ffcdd2;
+        }
+
+        .btn-pay {
+            background: #1DA1F2;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-pay:hover {
+            background: #0d8ecf;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(29, 161, 242, 0.3);
+        }
+
+        .btn-pay:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-pay.paid {
+            background: #28a745;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .payment-history {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #1DA1F2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .payment-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .payment-card.paid {
+            border-left-color: #28a745;
+        }
+
+        .payment-card.unpaid {
+            border-left-color: #dc3545;
+        }
+
+        .payment-info h4 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .payment-info p {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .payment-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2a5298;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            font-size: 14px;
+        }
+
+        .tab:hover {
+            color: #2a5298;
+        }
+
+        .tab.active {
+            color: #2a5298;
+            border-bottom-color: #2a5298;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* PAYMENT MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        .payment-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 0;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: modalSlideUp 0.4s ease-out;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .modal-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .modal-body {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .phone-display {
+            background: #f0f7ff;
+            border: 2px dashed #2a5298;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .phone-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .phone-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2a5298;
+            letter-spacing: 1px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .phone-label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .qr-placeholder {
+            width: 150px;
+            height: 150px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            margin: 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .payment-instructions {
+            text-align: left;
+            background: #fff8e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .payment-instructions h4 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .payment-instructions ul {
+            font-size: 13px;
+            color: #555;
+            padding-left: 18px;
+            line-height: 1.8;
+        }
+
+        .payment-instructions li {
+            margin-bottom: 4px;
+        }
+
+        .btn-copy {
+            background: #e8f0fe;
+            color: #2a5298;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-copy:hover {
+            background: #d2e3fc;
+        }
+
+        .btn-close-modal {
+            width: 100%;
+            padding: 14px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-close-modal:hover {
+            background: #5a6268;
+        }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        /* AMOUNT SETTING CARD */
+        .amount-setting-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .amount-setting-card h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            opacity: 0.95;
+        }
+
+        .current-amount {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 10px 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .amount-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .amount-input-group .form-control {
+            width: 150px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .amount-input-group .form-control::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .amount-input-group .form-control:focus {
+            border-color: white;
+            background: rgba(255,255,255,0.25);
+        }
+
+        .btn-update-amount {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-update-amount:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .amount-info {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        /* MEMBER AMOUNT DISPLAY */
+        .member-amount-display {
+            background: #e8f0fe;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #2a5298;
+        }
+
+        .member-amount-display .label {
+            font-size: 14px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .member-amount-display .amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2a5298;
+        }
+
+        /* DATA PERSISTENCE INFO */
+        .storage-info {
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #2e7d32;
+        }
+
+        .storage-info .icon {
+            font-size: 20px;
+        }
+
+        .btn-reset-data {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-left: auto;
+        }
+
+        .btn-reset-data:hover {
+            background: #c82333;
+        }
+
+        /* Password modal specific styles */
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 13px;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .password-toggle:hover {
+            color: #2a5298;
+        }
+
+        .form-control.error {
+            border-color: #dc3545;
+            background-color: #fff5f5;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        @media (max-width: 600px) {
+            .add-form-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .payment-card {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .phone-number {
+                font-size: 22px;
+            }
+            .amount-input-group {
+                flex-direction: column;
+            }
+            .amount-input-group .form-control {
+                width: 100%;
+            }
+            .storage-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <div class="particles" id="particles"></div>
+
+    <!-- Login Container -->
+    <div class="login-container" id="loginContainer">
+        <div class="header">
+            <h1>MOTINAGAR-2</h1>
+            <div class="subtitle">Management System</div>
+        </div>
+
+        <div class="form-body">
+            <form id="loginForm" novalidate>
+                <div class="role-selector">
+                    <label class="role-option active" onclick="selectRole('admin')">
+                        <input type="radio" name="role" value="admin" checked>
+                        <span>Admin</span>
+                    </label>
+                    <label class="role-option" onclick="selectRole('society')">
+                        <input type="radio" name="role" value="society">
+                        <span>Society Members</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="required">Username</label>
+                    <div class="input-wrapper">
+                        <input type="text" 
+                               id="username" 
+                               class="form-control" 
+                               placeholder="Enter your username"
+                               autocomplete="username">
+                    </div>
+                    <div class="error-message" id="usernameError">
+                        <span>⚠</span> Username is required
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="required">Password</label>
+                    <div class="input-wrapper password-wrapper">
+                        <input type="password" 
+                               id="password" 
+                               class="form-control" 
+                               placeholder="Enter your password"
+                               autocomplete="current-password">
+                        <span class="password-toggle" onclick="togglePassword()">
+                            <span id="toggleIcon">👁</span>
+                            <span id="toggleText">Show Password</span>
+                        </span>
+                    </div>
+                    <div class="error-message" id="passwordError">
+                        <span>⚠</span> Password is required
+                    </div>
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Remember me</label>
+                </div>
+
+                <div style="text-align: right; margin-bottom: 15px;">
+                    <a href="#" onclick="showForgotPasswordModal(); return false;" style="font-size: 13px; color: #2a5298; text-decoration: none; font-weight: 600;">🔑 Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <span class="spinner"></span>
+                    <span class="btn-text">Login</span>
+                </button>
+            </form>
+
+            <div class="notice">
+                Please use Google Chrome for better experience
+            </div>
+
+            <div class="maintenance-notice">
+                <div class="warning-icon">⚠️</div>
+                <p>System will be under maintenance everyday between<br>
+                <strong>11:55 PM</strong> to <strong>12:30 AM</strong></p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p> 2026 MOTINAGAR-2. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <h2>👋 Welcome, <span id="welcomeUser">Admin</span></h2>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="btn-logout" onclick="showChangePasswordModal()" style="background: rgba(40, 167, 69, 0.9); border-color: rgba(40, 167, 69, 0.4);">🔐 Change Password</button>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        <div class="dashboard-body">
+            
+            <!-- Data Persistence Info (Admin Only) -->
+            <div class="storage-info" id="storageInfo" style="display: none;">
+                <span class="icon">💾</span>
+                <span>All data is saved automatically. Members will persist until admin removes them.</span>
+                <button class="btn-reset-data" onclick="resetAllData()">🗑 Reset All Data</button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs" id="dashboardTabs">
+                <button class="tab active" onclick="switchTab('overview')" id="tab-overview">📊 Overview</button>
+                <button class="tab" onclick="switchTab('payments')" id="tab-payments">💳 Payments</button>
+                <button class="tab" onclick="switchTab('members')" id="tab-members">👥 Members</button>
+            </div>
+
+            <!-- Overview Tab -->
+            <div class="tab-content active" id="content-overview">
+                <!-- Admin Amount Setting (Only visible to Admin) -->
+                <div id="adminAmountSection" style="display: none;">
+                    <div class="amount-setting-card">
+                        <h3>💰 Set Payment Amount for All Members</h3>
+                        <div class="current-amount">₹<span id="displayCurrentAmount">500</span></div>
+                        <div class="amount-input-group">
+                            <span style="font-size: 20px; font-weight: 700;">₹</span>
+                            <input type="number" 
+                                   id="newAmountInput" 
+                                   class="form-control" 
+                                   placeholder="Enter amount" 
+                                   min="1"
+                                   style="color: #333;">
+                            <button class="btn-update-amount" onclick="updatePaymentAmount()">Update Amount</button>
+                        </div>
+                        <div class="amount-info">This amount will be shown to all Society Members for payment</div>
+                    </div>
+                </div>
+
+                <!-- Member Amount Display (Only visible to Society Members) -->
+                <div id="memberAmountSection" style="display: none;">
+                    <div class="member-amount-display">
+                        <span class="label">💳 Amount You Need to Pay:</span>
+                        <span class="amount">₹<span id="memberViewAmount">500</span></span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="totalMembers">0</h3>
+                        <p>Total Members</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalAdmins">0</h3>
+                        <p>Admins</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalSociety">0</h3>
+                        <p>Society Members</p>
+                    </div>
+                    <div class="stat-card" style="border-left-color: #1DA1F2;">
+                        <h3 id="totalPaid" style="color: #1DA1F2;">0</h3>
+                        <p>Paid Members</p>
+                    </div>
+                </div>
+
+                <h3 class="section-title">💰 Payment Summary</h3>
+                <div class="payment-history" id="paymentSummary">
+                    <!-- Dynamically filled -->
+                </div>
+            </div>
+
+            <!-- Payments Tab -->
+            <div class="tab-content" id="content-payments">
+                <h3 class="section-title" id="paymentsTitle">💳 Payment History</h3>
+                <div id="paymentsContent">
+                    <!-- Society Member: Pay button | Admin: View all -->
+                </div>
+            </div>
+
+            <!-- Members Tab -->
+            <div class="tab-content" id="content-members">
+                <div id="adminSection">
+                    <h3 class="section-title">➕ Add New Member</h3>
+                    <div class="add-form">
+                        <form id="addMemberForm">
+                            <div class="add-form-grid">
+                                <div class="form-group">
+                                    <label class="required">Full Name</label>
+                                    <input type="text" id="newName" class="form-control" placeholder="Enter full name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Username</label>
+                                    <input type="text" id="newUsername" class="form-control" placeholder="Enter username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Password</label>
+                                    <input type="password" id="newPassword" class="form-control" placeholder="Enter password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Role</label>
+                                    <select id="newRole" class="form-control" style="cursor: pointer;">
+                                        <option value="society">Society Member</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-add">➕ Add Member</button>
+                        </form>
+                    </div>
+                </div>
+
+                <h3 class="section-title">👥 All Members</h3>
+                <div style="overflow-x: auto;">
+                    <table class="members-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Role</th>
+                                <th>Amount</th>
+                                <th>Payment Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersTableBody">
+                        </tbody>
+                    </table>
+                    <div class="empty-state" id="emptyState" style="display: none;">
+                        <p>No members found. Add your first member above.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="payment-modal">
+            <div class="modal-header">
+                <h3>📞 Contact for Payment</h3>
+                <p>Please contact the administrator to complete your payment</p>
+            </div>
+            <div class="modal-body">
+                <div style="background: #e8f0fe; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                    <div style="font-size: 13px; color: #555; margin-bottom: 5px;">Total Amount to Pay (Including Arrears):</div>
+                    <div style="font-size: 32px; font-weight: 700; color: #2a5298;">₹<span id="modalAmount">500</span></div>
+                    <div style="font-size: 12px; color: #888; margin-top: 5px;">Current cycle: ₹<span id="modalCurrentAmount">500</span></div>
+                </div>
+
+                <div style="background: #e8f0fe; border-radius: 8px; padding: 15px; margin: 15px 0;">
+                    <div style="font-size: 13px; color: #555; margin-bottom: 10px;">Contact for Payment:</div>
+                    <div class="phone-display" style="margin: 8px 0; border: none; background: transparent;">
+                        <div class="phone-icon">📱</div>
+                        <div class="phone-number" id="modalPhoneNumber">+91 7211127609</div>
+                        <div class="phone-label">Primary — WhatsApp / Call / PayTM / GPay</div>
+                    </div>
+                    <div class="phone-display" style="margin: 8px 0; border: none; background: transparent;">
+                        <div class="phone-icon">📱</div>
+                        <div class="phone-number">+91 8200646650</div>
+                        <div class="phone-label">Secondary — WhatsApp / Call</div>
+                    </div>
+                </div>
+
+                <div class="qr-placeholder">💳</div>
+                <p style="font-size: 12px; color: #888; margin-top: 5px;">Scan QR or use number above</p>
+
+                <div class="payment-instructions">
+                    <h4>📋 Payment Instructions:</h4>
+                    <ul>
+                        <li>Call or WhatsApp any number above</li>
+                        <li>Send <strong>₹<span class="modal-amount-display">500</span></strong> via UPI / PayTM / GPay</li>
+                        <li>This includes any previous arrears</li>
+                        <li>Share screenshot of payment</li>
+                        <li>Admin will verify and mark you as PAID</li>
+                        <li>You will receive the <strong>Blue Tick ✓</strong> after verification</li>
+                    </ul>
+                </div>
+
+                <a href="https://wa.me/917211127609?text=Hi,%20I%20want%20to%20make%20a%20payment%20of%20Rs%20500%20for%20MOTINAGAR-2" 
+                   class="btn-whatsapp" 
+                   target="_blank"
+                   id="whatsappLink">
+                    💬 WhatsApp Primary
+                </a>
+
+                <a href="https://wa.me/918200646650?text=Hi,%20I%20want%20to%20make%20a%20payment%20of%20Rs%20500%20for%20MOTINAGAR-2" 
+                   class="btn-whatsapp" 
+                   target="_blank"
+                   style="background: #128C7E; margin-left: 10px;">
+                    💬 WhatsApp Secondary
+                </a>
+
+                <br>
+
+                <button class="btn-copy" onclick="copyPhoneNumber()">
+                    📋 Copy Number
+                </button>
+            </div>
+            <button class="btn-close-modal" onclick="closePaymentModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal-overlay" id="changePasswordModal">
+        <div class="payment-modal" style="max-width: 420px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #28a745 0%, #218838 100%);">
+                <h3>🔐 Change Password</h3>
+                <p>Update your account password</p>
+            </div>
+            <div class="modal-body" style="padding: 30px;">
+                <form id="changePasswordForm" novalidate>
+                    <div class="form-group" style="margin-bottom: 18px; text-align: left;">
+                        <label class="required" style="font-size: 14px; font-weight: 600; color: #333;">Current Password</label>
+                        <div class="password-wrapper" style="position: relative;">
+                            <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password" required style="width: 100%; padding: 12px 40px 12px 15px;">
+                            <span class="password-toggle" onclick="toggleModalPassword('currentPassword', 'currToggleIcon')" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 13px;">
+                                <span id="currToggleIcon">👁</span>
+                            </span>
+                        </div>
+                        <div class="error-message" id="currentPasswordError" style="display: none; color: #dc3545; font-size: 13px; margin-top: 5px;">
+                            <span>⚠</span> Incorrect current password
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 18px; text-align: left;">
+                        <label class="required" style="font-size: 14px; font-weight: 600; color: #333;">New Password</label>
+                        <div class="password-wrapper" style="position: relative;">
+                            <input type="password" id="newPasswordInput" class="form-control" placeholder="Enter new password (min 4 chars)" required minlength="4" style="width: 100%; padding: 12px 40px 12px 15px;">
+                            <span class="password-toggle" onclick="toggleModalPassword('newPasswordInput', 'newToggleIcon')" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 13px;">
+                                <span id="newToggleIcon">👁</span>
+                            </span>
+                        </div>
+                        <div class="error-message" id="newPasswordError" style="display: none; color: #dc3545; font-size: 13px; margin-top: 5px;">
+                            <span>⚠</span> Password must be at least 4 characters
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 25px; text-align: left;">
+                        <label class="required" style="font-size: 14px; font-weight: 600; color: #333;">Confirm New Password</label>
+                        <div class="password-wrapper" style="position: relative;">
+                            <input type="password" id="confirmPasswordInput" class="form-control" placeholder="Confirm new password" required style="width: 100%; padding: 12px 40px 12px 15px;">
+                            <span class="password-toggle" onclick="toggleModalPassword('confirmPasswordInput', 'confToggleIcon')" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 13px;">
+                                <span id="confToggleIcon">👁</span>
+                            </span>
+                        </div>
+                        <div class="error-message" id="confirmPasswordError" style="display: none; color: #dc3545; font-size: 13px; margin-top: 5px;">
+                            <span>⚠</span> Passwords do not match
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="changePassBtn" style="background: linear-gradient(135deg, #28a745 0%, #218838 100%); width: 100%; padding: 14px; border: none; border-radius: 6px; color: white; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        <span class="spinner"></span>
+                        <span class="btn-text">🔐 Update Password</span>
+                    </button>
+                </form>
+            </div>
+            <button class="btn-close-modal" onclick="closeChangePasswordModal()" style="background: #6c757d;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgotPasswordModal">
+        <div class="payment-modal" style="max-width: 420px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #fd7e14 0%, #e66a00 100%);">
+                <h3>🔑 Forgot Password?</h3>
+                <p>Contact admin to reset your password</p>
+            </div>
+            <div class="modal-body" style="padding: 30px;">
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: left;">
+                    <h4 style="font-size: 15px; color: #856404; margin-bottom: 10px;">📋 How to Reset:</h4>
+                    <ol style="font-size: 13px; color: #555; padding-left: 20px; line-height: 1.8;">
+                        <li>Contact the Admin via WhatsApp or Call</li>
+                        <li>Provide your <strong>Username</strong> for verification</li>
+                        <li>Admin will reset your password</li>
+                        <li>Use the new password to login</li>
+                        <li>Change it immediately after login</li>
+                    </ol>
+                </div>
+
+                <div style="background: #e8f0fe; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
+                    <div style="font-size: 13px; color: #555; margin-bottom: 10px;">Contact Admin for Password Reset:</div>
+                    <div class="phone-display" style="margin: 10px 0; border: none; background: transparent;">
+                        <div class="phone-icon">📱</div>
+                        <div class="phone-number">+91 7211127609</div>
+                        <div class="phone-label">Primary Contact</div>
+                    </div>
+                    <div class="phone-display" style="margin: 10px 0; border: none; background: transparent;">
+                        <div class="phone-icon">📱</div>
+                        <div class="phone-number">+91 8200646650</div>
+                        <div class="phone-label">Secondary Contact</div>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/917211127609?text=Hi%20Admin,%20I%20forgot%20my%20password%20for%20MOTINAGAR-2.%20My%20username%20is:%20" 
+                   class="btn-whatsapp" 
+                   target="_blank"
+                   style="margin-top: 10px;">
+                   💬 WhatsApp Primary
+                </a>
+
+                <a href="https://wa.me/918200646650?text=Hi%20Admin,%20I%20forgot%20my%20password%20for%20MOTINAGAR-2.%20My%20username%20is:%20" 
+                   class="btn-whatsapp" 
+                   target="_blank"
+                   style="margin-top: 10px; margin-left: 10px; background: #128C7E;">
+                   💬 WhatsApp Secondary
+                </a>
+
+                <br>
+
+                <button class="btn-copy" onclick="copyPhoneNumber('+91 7211127609')" style="margin-top: 10px;">
+                    📋 Copy Primary
+                </button>
+
+                <button class="btn-copy" onclick="copyPhoneNumber('+91 8200646650')" style="margin-top: 10px; margin-left: 10px;">
+                    📋 Copy Secondary
+                </button>
+            </div>
+            <button class="btn-close-modal" onclick="closeForgotPasswordModal()" style="background: #6c757d;">Close</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <div class="toast-icon" id="toastIcon">✓</div>
+        <div class="toast-content">
+            <h4 id="toastTitle">Success</h4>
+            <p id="toastMessage">Operation successful!</p>
+        </div>
+    </div>
+
+    <script>
+        // Payment phone numbers
+        const PAYMENT_PHONE = '+91 7211127609';
+        const PAYMENT_PHONE_RAW = '917211127609';
+        const PAYMENT_PHONE_SECONDARY = '+91 8200646650';
+        const PAYMENT_PHONE_SECONDARY_RAW = '918200646650';
+
+        // Storage keys
+        const STORAGE_KEYS = {
+            MEMBERS: 'motinagar2_members',
+            AMOUNT: 'motinagar2_amount',
+            SESSION: 'motinagar2_session'
+        };
+
+        // Default data
+        const DEFAULT_MEMBERS = [
+            { 
+                id: 1, 
+                name: 'Super Admin', 
+                username: 'admin', 
+                password: hashPassword('123'), 
+                passwordVisible: obfuscatePassword('123'),
+                role: 'admin',
+                paid: true,
+                totalDue: 500,
+                amountPaid: 500,
+                paymentHistory: [
+                    { date: '2026-05-01', amount: 500, method: 'Cash', status: 'paid' }
+                ]
+            },
+            { 
+                id: 2, 
+                name: 'Rahul Sharma', 
+                username: 'rahul', 
+                password: hashPassword('rahul123'), 
+                passwordVisible: obfuscatePassword('rahul123'),
+                role: 'society',
+                paid: true,
+                totalDue: 500,
+                amountPaid: 500,
+                paymentHistory: [
+                    { date: '2026-05-20', amount: 500, method: 'UPI', status: 'paid' }
+                ]
+            },
+            { 
+                id: 3, 
+                name: 'Priya Patel', 
+                username: 'priya', 
+                password: hashPassword('priya123'), 
+                passwordVisible: obfuscatePassword('priya123'),
+                role: 'society',
+                paid: false,
+                totalDue: 500,
+                amountPaid: 0,
+                paymentHistory: []
+            }
+        ];
+
+        const DEFAULT_AMOUNT = 500;
+
+        // Simple hash function for password security
+        function hashPassword(password) {
+            let hash = 0;
+            for (let i = 0; i < password.length; i++) {
+                const char = password.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return 'hash_' + Math.abs(hash).toString(16);
+        }
+
+        // Obfuscate password for admin viewing (not true encryption, but hides from casual view)
+        // Uses XOR with a fixed key - sufficient for client-side demo purposes
+        function obfuscatePassword(password) {
+            const key = 'MOTINAGAR2';
+            let result = '';
+            for (let i = 0; i < password.length; i++) {
+                result += String.fromCharCode(password.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return btoa(result);
+        }
+
+        function deobfuscatePassword(obfuscated) {
+            const key = 'MOTINAGAR2';
+            try {
+                const decoded = atob(obfuscated);
+                let result = '';
+                for (let i = 0; i < decoded.length; i++) {
+                    result += String.fromCharCode(decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+                }
+                return result;
+            } catch (e) {
+                return '***';
+            }
+        }
+
+        // Global variables
+        let members = [];
+        let globalPaymentAmount = DEFAULT_AMOUNT;
+        let currentUser = null;
+        let sessionToken = null;
+
+        // ==================== LOCAL STORAGE FUNCTIONS ====================
+
+        // Save members to localStorage
+        function saveMembersToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.MEMBERS, JSON.stringify(members));
+            } catch (e) {
+                console.error('Failed to save members:', e);
+            }
+        }
+
+        // Load members from localStorage
+        function loadMembersFromStorage() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEYS.MEMBERS);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    // Ensure admin always exists
+                    const hasAdmin = parsed.some(m => m.username === 'admin');
+                    if (hasAdmin) {
+                        // Migrate old plain-text passwords to hashed
+                        parsed.forEach(m => {
+                            if (m.password && !m.password.startsWith('hash_')) {
+                                const plainPass = m.password;
+                                m.password = hashPassword(plainPass);
+                                m.passwordVisible = obfuscatePassword(plainPass);
+                            }
+                            // Ensure new fields exist
+                            if (m.totalDue === undefined) m.totalDue = globalPaymentAmount;
+                            if (m.amountPaid === undefined) m.amountPaid = m.paid ? globalPaymentAmount : 0;
+                            if (m.passwordVisible === undefined && m.username === 'admin') {
+                                m.passwordVisible = obfuscatePassword('123');
+                            }
+                        });
+                        return parsed;
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to load members:', e);
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_MEMBERS));
+        }
+
+        // Save amount to localStorage
+        function saveAmountToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.AMOUNT, globalPaymentAmount.toString());
+            } catch (e) {
+                console.error('Failed to save amount:', e);
+            }
+        }
+
+        // Load amount from localStorage
+        function loadAmountFromStorage() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEYS.AMOUNT);
+                if (stored) {
+                    const parsed = parseInt(stored);
+                    if (!isNaN(parsed) && parsed > 0) {
+                        return parsed;
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to load amount:', e);
+            }
+            return DEFAULT_AMOUNT;
+        }
+
+        // Reset all data (Admin only)
+        function resetAllData() {
+            if (!confirm('⚠️ WARNING: This will DELETE all members and reset all data!\n\nAre you sure you want to reset everything?')) {
+                return;
+            }
+            
+            if (!confirm('This action CANNOT be undone. All added members will be lost.\n\nConfirm reset?')) {
+                return;
+            }
+            
+            // Clear localStorage
+            localStorage.removeItem(STORAGE_KEYS.MEMBERS);
+            localStorage.removeItem(STORAGE_KEYS.AMOUNT);
+            
+            // Reset to defaults
+            members = JSON.parse(JSON.stringify(DEFAULT_MEMBERS));
+            globalPaymentAmount = DEFAULT_AMOUNT;
+            
+            // Save defaults back
+            saveMembersToStorage();
+            saveAmountToStorage();
+            
+            // Refresh UI
+            renderMembers();
+            renderOverview();
+            updateStats();
+            
+            showToast('success', 'Data Reset', 'All data has been reset to default. Page will reload.');
+            
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }
+
+        // ==================== SESSION MANAGEMENT ====================
+
+        function createSession(user) {
+            sessionToken = btoa(user.username + ':' + Date.now());
+            const session = {
+                token: sessionToken,
+                username: user.username,
+                loginTime: Date.now()
+            };
+            localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(session));
+            return sessionToken;
+        }
+
+        function checkSession() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEYS.SESSION);
+                if (stored) {
+                    const session = JSON.parse(stored);
+                    // Session valid for 24 hours
+                    if (Date.now() - session.loginTime < 24 * 60 * 60 * 1000) {
+                        const user = members.find(m => m.username === session.username);
+                        if (user) {
+                            currentUser = user;
+                            sessionToken = session.token;
+                            return true;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Session error:', e);
+            }
+            return false;
+        }
+
+        function clearSession() {
+            localStorage.removeItem(STORAGE_KEYS.SESSION);
+            sessionToken = null;
+        }
+
+        // ==================== INITIALIZATION ====================
+
+        // Initialize data from storage
+        function initializeData() {
+            members = loadMembersFromStorage();
+            globalPaymentAmount = loadAmountFromStorage();
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.width = particle.style.height = (Math.random() * 20 + 5) + 'px';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Initialize on load
+        initializeData();
+
+        // ==================== UI FUNCTIONS ====================
+
+        // Role selection
+        function selectRole(role) {
+            document.querySelectorAll('.role-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            document.querySelector(`input[value="${role}"]`).checked = true;
+        }
+
+        // Password visibility toggle
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleText = document.getElementById('toggleText');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleText.textContent = 'Hide Password';
+                toggleIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleText.textContent = 'Show Password';
+                toggleIcon.textContent = '👁';
+            }
+        }
+
+        // Toast notification
+        function showToast(type, title, message) {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toast.className = 'toast ' + type;
+            toastIcon.textContent = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabName).classList.add('active');
+            document.getElementById('content-' + tabName).classList.add('active');
+            
+            if (tabName === 'payments') {
+                renderPayments();
+            } else if (tabName === 'members') {
+                renderMembers();
+            } else if (tabName === 'overview') {
+                renderOverview();
+            }
+        }
+
+        // Update payment amount (Admin only)
+        function updatePaymentAmount() {
+            const input = document.getElementById('newAmountInput');
+            const newAmount = parseInt(input.value);
+
+            if (!newAmount || newAmount < 1) {
+                showToast('error', 'Invalid Amount', 'Please enter a valid amount greater than 0');
+                return;
+            }
+
+            // Confirm with admin about resetting all payment statuses
+            const paidCount = members.filter(m => m.role === 'society' && m.paid).length;
+            let confirmMsg = `Set new payment amount to ₹${newAmount}?`;
+            if (paidCount > 0) {
+                confirmMsg += `\n\n⚠️ ${paidCount} paid member(s) will be marked as UNPAID and must pay the new amount.`;
+            }
+            confirmMsg += `\n\nAll society members will need to pay ₹${newAmount} (including any previous arrears).`;
+
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
+            globalPaymentAmount = newAmount;
+
+            // Reset all society members to unpaid and add new amount to their total due
+            members.forEach(member => {
+                if (member.role === 'society') {
+                    // Add the new amount to their total due (arrears accumulate)
+                    member.totalDue = (member.totalDue || 0) + newAmount;
+                    // Mark as unpaid since there's a new amount to pay
+                    member.paid = false;
+                }
+            });
+
+            // Save to storage
+            saveAmountToStorage();
+            saveMembersToStorage();
+
+            document.getElementById('displayCurrentAmount').textContent = newAmount;
+            document.getElementById('memberViewAmount').textContent = newAmount;
+            input.value = '';
+
+            showToast('success', 'Amount Updated', `New amount ₹${newAmount} set. All members must pay including arrears.`);
+
+            // Refresh views
+            renderOverview();
+            renderPayments();
+            renderMembers();
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('totalMembers').textContent = members.length;
+            document.getElementById('totalAdmins').textContent = members.filter(m => m.role === 'admin').length;
+            document.getElementById('totalSociety').textContent = members.filter(m => m.role === 'society').length;
+            document.getElementById('totalPaid').textContent = members.filter(m => m.paid).length;
+        }
+
+        // Blue tick HTML
+        function getBlueTick() {
+            return '<span class="blue-tick" title="Verified Paid">✓</span>';
+        }
+
+        // Payment status badge
+        function getPaymentBadge(member) {
+            if (member.paid) {
+                return `<span class="paid-badge">${getBlueTick()} PAID</span>`;
+            } else {
+                return `<span class="unpaid-badge">⏳ UNPAID</span>`;
+            }
+        }
+
+        // Render overview
+        function renderOverview() {
+            const summary = document.getElementById('paymentSummary');
+            const paidMembers = members.filter(m => m.paid);
+            const unpaidMembers = members.filter(m => !m.paid && m.role === 'society');
+            
+            let html = '';
+            
+            paidMembers.forEach(member => {
+                const lastPayment = member.paymentHistory[member.paymentHistory.length - 1];
+                html += `
+                    <div class="payment-card paid">
+                        <div class="payment-info">
+                            <h4>${member.name} ${getBlueTick()}</h4>
+                            <p>Last paid on ${lastPayment ? lastPayment.date : 'N/A'} via ${lastPayment ? lastPayment.method : 'N/A'}</p>
+                        </div>
+                        <div class="payment-amount">₹${lastPayment ? lastPayment.amount : '0'}</div>
+                    </div>
+                `;
+            });
+            
+            unpaidMembers.forEach(member => {
+                html += `
+                    <div class="payment-card unpaid">
+                        <div class="payment-info">
+                            <h4>${member.name}</h4>
+                            <p>Payment pending — Amount: ₹${globalPaymentAmount} — Contact: ${PAYMENT_PHONE}</p>
+                        </div>
+                        <div style="color: #c62828; font-weight: 600;">UNPAID</div>
+                    </div>
+                `;
+            });
+            
+            if (html === '') {
+                html = '<div class="empty-state">No payment records yet</div>';
+            }
+            
+            summary.innerHTML = html;
+        }
+
+        // Render payments tab
+        function renderPayments() {
+            const container = document.getElementById('paymentsContent');
+            const title = document.getElementById('paymentsTitle');
+            
+            if (currentUser.role === 'admin') {
+                title.textContent = '💳 All Payment Records (Admin View)';
+                
+                let html = '<div class="payment-history">';
+                let hasPayments = false;
+                
+                members.forEach(member => {
+                    if (member.paymentHistory.length > 0) {
+                        hasPayments = true;
+                        member.paymentHistory.forEach(payment => {
+                            html += `
+                                <div class="payment-card paid">
+                                    <div class="payment-info">
+                                        <h4>${member.name} ${getBlueTick()}</h4>
+                                        <p>${payment.date} • ${payment.method} • ${PAYMENT_PHONE}</p>
+                                    </div>
+                                    <div class="payment-amount">₹${payment.amount}</div>
+                                </div>
+                            `;
+                        });
+                    }
+                });
+                
+                // Show unpaid members too
+                const unpaidMembers = members.filter(m => !m.paid && m.role === 'society');
+                if (unpaidMembers.length > 0) {
+                    html += `<h4 style="margin: 20px 0 10px; color: #666; font-size: 14px;">⏳ Pending Payments (₹${globalPaymentAmount} each):</h4>`;
+                    unpaidMembers.forEach(member => {
+                        html += `
+                            <div class="payment-card unpaid">
+                                <div class="payment-info">
+                                    <h4>${member.name}</h4>
+                                    <p>Contact: ${PAYMENT_PHONE} to remind for ₹${globalPaymentAmount} payment</p>
+                                </div>
+                                <button class="btn-pay" onclick="markAsPaid(${member.id})">✓ Mark Paid</button>
+                            </div>
+                        `;
+                    });
+                }
+                
+                if (!hasPayments && unpaidMembers.length === 0) {
+                    html += '<div class="empty-state">No payment records yet</div>';
+                }
+                
+                html += '</div>';
+                container.innerHTML = html;
+                
+            } else {
+                // Society Member View
+                title.textContent = '💳 My Payments';
+                
+                const myHistory = currentUser.paymentHistory || [];
+                let html = '<div class="payment-history">';
+                
+                if (myHistory.length > 0) {
+                    myHistory.forEach(payment => {
+                        html += `
+                            <div class="payment-card paid">
+                                <div class="payment-info">
+                                    <h4>Payment ${getBlueTick()}</h4>
+                                    <p>${payment.date} • ${payment.method} • Verified by Admin</p>
+                                </div>
+                                <div class="payment-amount">₹${payment.amount}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<div class="empty-state">No payment history yet</div>';
+                }
+                
+                html += '</div>';
+                
+                // Add Pay Now button if not paid
+                if (!currentUser.paid) {
+                    html += `
+                        <div style="text-align: center; margin-top: 20px;">
+                            <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                                <div style="font-size: 14px; color: #856404; margin-bottom: 5px;">Amount Due:</div>
+                                <div style="font-size: 36px; font-weight: 700; color: #d35400;">₹${globalPaymentAmount}</div>
+                            </div>
+                            <button class="btn-pay" onclick="showPaymentModal()" style="font-size: 16px; padding: 14px 32px;">
+                                💳 Pay Now (₹${globalPaymentAmount})
+                            </button>
+                            <p style="margin-top: 10px; font-size: 13px; color: #666;">
+                                Contact: <strong>${PAYMENT_PHONE}</strong>
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div style="text-align: center; margin-top: 20px; padding: 20px; background: #e8f5e9; border-radius: 8px; color: #2e7d32; font-weight: 600;">
+                            ${getBlueTick()} You have paid ₹${globalPaymentAmount}. Thank you!
+                        </div>
+                    `;
+                }
+                
+                container.innerHTML = html;
+            }
+        }
+
+        // Show payment modal
+        function showPaymentModal() {
+            document.getElementById('modalAmount').textContent = globalPaymentAmount;
+            document.querySelectorAll('.modal-amount-display').forEach(el => {
+                el.textContent = globalPaymentAmount;
+            });
+            
+            const waLink = document.getElementById('whatsappLink');
+            waLink.href = `https://wa.me/${PAYMENT_PHONE_RAW}?text=Hi,%20I%20want%20to%20make%20a%20payment%20of%20Rs%20${globalPaymentAmount}%20for%20MOTINAGAR-2`;
+            
+            document.getElementById('paymentModal').classList.add('show');
+        }
+
+        // Close payment modal
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('show');
+        }
+
+        // Copy phone number
+        function copyPhoneNumber(phone) {
+            const num = phone || PAYMENT_PHONE;
+            navigator.clipboard.writeText(num).then(() => {
+                showToast('success', 'Copied!', `${num} copied to clipboard`);
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = num;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('success', 'Copied!', `${num} copied to clipboard`);
+            });
+        }
+
+        // Admin marks member as paid
+        function markAsPaid(memberId) {
+            const memberIndex = members.findIndex(m => m.id === memberId);
+            if (memberIndex !== -1) {
+                members[memberIndex].paid = true;
+                members[memberIndex].paymentHistory.push({
+                    date: new Date().toISOString().split('T')[0],
+                    amount: globalPaymentAmount,
+                    method: 'Phone/UPI',
+                    status: 'paid'
+                });
+                
+                // Save to storage
+                saveMembersToStorage();
+                
+                showToast('success', 'Payment Verified', `${members[memberIndex].name} marked as PAID with Blue Tick!`);
+                renderPayments();
+                updateStats();
+                renderMembers();
+            }
+        }
+
+        // Render members table
+        function renderMembers() {
+            const tbody = document.getElementById('membersTableBody');
+            const emptyState = document.getElementById('emptyState');
+            const isAdmin = currentUser && currentUser.role === 'admin';
+
+            if (members.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            tbody.innerHTML = members.map((member, index) => {
+                const dueAmount = (member.totalDue || 0) - (member.amountPaid || 0);
+                const visiblePass = member.passwordVisible ? deobfuscatePassword(member.passwordVisible) : '***';
+                const passId = `pass-${member.id}`;
+                return `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>
+                        ${member.name}
+                        ${member.paid ? getBlueTick() : ''}
+                    </td>
+                    <td>${member.username}</td>
+                    <td>
+                        ${isAdmin ? `
+                            <span id="${passId}" style="font-family: monospace; background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 13px;">••••••</span>
+                            <button onclick="togglePasswordVisibility('${passId}', '${member.passwordVisible || ''}')" style="background: none; border: none; cursor: pointer; font-size: 14px; margin-left: 5px;" title="Show/Hide Password">👁</button>
+                        ` : '<span style="color: #888; font-size: 12px;">Hidden</span>'}
+                    </td>
+                    <td><span class="badge ${member.role === 'admin' ? 'badge-admin' : 'badge-member'}">${member.role === 'admin' ? 'Admin' : 'Society Member'}</span></td>
+                    <td>₹${dueAmount > 0 ? dueAmount : (member.paid ? (member.amountPaid || 0) : globalPaymentAmount)}</td>
+                    <td>${getPaymentBadge(member)}</td>
+                    <td>
+                        ${member.username !== 'admin' ? `
+                            <button class="btn-delete" onclick="deleteMember(${member.id})">Delete</button>
+                            ${!member.paid && member.role === 'society' ? `<button class="btn-pay" onclick="markAsPaid(${member.id})" style="margin-left: 5px;">✓ Paid (₹${dueAmount})</button>` : ''}
+                            ${isAdmin ? `<button class="btn-pay" onclick="resetMemberPassword(${member.id})" style="margin-left: 5px; background: #fd7e14;">🔑 Reset</button>` : ''}
+                        ` : '<span style="color: #888; font-size: 12px;">Protected</span>'}
+                    </td>
+                </tr>
+            `}).join('');
+
+            updateStats();
+        }
+
+        // Toggle password visibility in members table
+        function togglePasswordVisibility(elementId, obfuscatedPass) {
+            const el = document.getElementById(elementId);
+            if (el.textContent === '••••••') {
+                el.textContent = deobfuscatePassword(obfuscatedPass);
+                el.style.background = '#e8f5e9';
+                el.style.color = '#2e7d32';
+            } else {
+                el.textContent = '••••••';
+                el.style.background = '#f0f0f0';
+                el.style.color = '#333';
+            }
+        }
+
+        // Delete member
+        function deleteMember(id) {
+            if (confirm('Are you sure you want to delete this member?')) {
+                members = members.filter(m => m.id !== id);
+                
+                // Save to storage after delete
+                saveMembersToStorage();
+                
+                renderMembers();
+                showToast('success', 'Deleted', 'Member removed successfully');
+            }
+        }
+
+        // Logout
+        function logout() {
+            currentUser = null;
+            clearSession();
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            showToast('info', 'Logged Out', 'You have been logged out successfully');
+        }
+
+        // ==================== PASSWORD MANAGEMENT ====================
+
+        // Toggle password visibility in modals
+        function toggleModalPassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                icon.textContent = '👁';
+            }
+        }
+
+        // Show Change Password Modal
+        function showChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.add('show');
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPasswordInput').value = '';
+            document.getElementById('confirmPasswordInput').value = '';
+            document.getElementById('currentPassword').classList.remove('error');
+            document.getElementById('newPasswordInput').classList.remove('error');
+            document.getElementById('confirmPasswordInput').classList.remove('error');
+            document.getElementById('currentPasswordError').classList.remove('show');
+            document.getElementById('newPasswordError').classList.remove('show');
+            document.getElementById('confirmPasswordError').classList.remove('show');
+        }
+
+        // Close Change Password Modal
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.remove('show');
+        }
+
+        // Show Forgot Password Modal
+        function showForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.add('show');
+        }
+
+        // Close Forgot Password Modal
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.remove('show');
+        }
+
+        // Change Password Handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const changePassForm = document.getElementById('changePasswordForm');
+            if (changePassForm) {
+                changePassForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const currentPass = document.getElementById('currentPassword');
+                    const newPass = document.getElementById('newPasswordInput');
+                    const confirmPass = document.getElementById('confirmPasswordInput');
+                    const currentError = document.getElementById('currentPasswordError');
+                    const newError = document.getElementById('newPasswordError');
+                    const confirmError = document.getElementById('confirmPasswordError');
+                    const btn = document.getElementById('changePassBtn');
+
+                    // Reset errors
+                    currentPass.classList.remove('error');
+                    newPass.classList.remove('error');
+                    confirmPass.classList.remove('error');
+                    currentError.classList.remove('show');
+                    newError.classList.remove('show');
+                    confirmError.classList.remove('show');
+
+                    let isValid = true;
+
+                    // Validate current password
+                    if (!currentPass.value.trim()) {
+                        currentPass.classList.add('error');
+                        currentError.textContent = '⚠ Current password is required';
+                        currentError.classList.add('show');
+                        isValid = false;
+                    } else if (hashPassword(currentPass.value.trim()) !== currentUser.password) {
+                        currentPass.classList.add('error');
+                        currentError.textContent = '⚠ Incorrect current password';
+                        currentError.classList.add('show');
+                        isValid = false;
+                    }
+
+                    // Validate new password
+                    if (!newPass.value.trim() || newPass.value.length < 4) {
+                        newPass.classList.add('error');
+                        newError.classList.add('show');
+                        isValid = false;
+                    }
+
+                    // Validate confirm password
+                    if (newPass.value !== confirmPass.value) {
+                        confirmPass.classList.add('error');
+                        confirmError.classList.add('show');
+                        isValid = false;
+                    }
+
+                    if (!isValid) return;
+
+                    // Show loading
+                    btn.classList.add('loading');
+
+                    setTimeout(() => {
+                        // Update password
+                        const userIndex = members.findIndex(m => m.username === currentUser.username);
+                        if (userIndex !== -1) {
+                            const newHash = hashPassword(newPass.value.trim());
+                            members[userIndex].password = newHash;
+                            currentUser.password = newHash;
+
+                            // Save to storage
+                            saveMembersToStorage();
+
+                            btn.classList.remove('loading');
+                            closeChangePasswordModal();
+                            showToast('success', 'Password Changed', 'Your password has been updated successfully!');
+                        }
+                    }, 1000);
+                });
+            }
+        });
+
+        // Admin Reset Member Password
+        function resetMemberPassword(memberId) {
+            const member = members.find(m => m.id === memberId);
+            if (!member) return;
+
+            if (member.username === 'admin') {
+                showToast('error', 'Not Allowed', 'Cannot reset Super Admin password from here');
+                return;
+            }
+
+            const newPass = prompt(`Reset password for ${member.name} (@${member.username})\n\nEnter new password (min 4 chars):`);
+            if (!newPass) return;
+
+            if (newPass.length < 4) {
+                showToast('error', 'Too Short', 'Password must be at least 4 characters');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to reset password for ${member.name}?`)) {
+                member.password = hashPassword(newPass);
+                member.passwordVisible = obfuscatePassword(newPass);
+                saveMembersToStorage();
+                showToast('success', 'Password Reset', `${member.name}'s password has been reset to: ${newPass}`);
+                renderMembers();
+            }
+        }
+
+        // ==================== EVENT LISTENERS ====================
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username');
+            const password = document.getElementById('password');
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            const loginBtn = document.getElementById('loginBtn');
+            const container = document.querySelector('.login-container');
+            
+            username.classList.remove('error');
+            password.classList.remove('error');
+            usernameError.classList.remove('show');
+            passwordError.classList.remove('show');
+            
+            let isValid = true;
+            
+            if (!username.value.trim()) {
+                username.classList.add('error');
+                usernameError.classList.add('show');
+                isValid = false;
+            }
+            
+            if (!password.value.trim()) {
+                password.classList.add('error');
+                passwordError.classList.add('show');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                container.classList.add('shake');
+                setTimeout(() => container.classList.remove('shake'), 500);
+                return;
+            }
+            
+            loginBtn.classList.add('loading');
+            
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            loginBtn.classList.remove('loading');
+            
+            // Check maintenance window
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const isMaintenance = (hours === 23 && minutes >= 55) || (hours === 0 && minutes <= 30);
+            
+            if (isMaintenance) {
+                showToast('error', 'System Maintenance', 'The system is currently under maintenance. Please try again after 12:30 AM.');
+                return;
+            }
+            
+            // Authenticate (compare hashed passwords)
+            const inputHash = hashPassword(password.value.trim());
+            const user = members.find(m => m.username === username.value.trim() && m.password === inputHash);
+            
+            if (user) {
+                currentUser = user;
+                createSession(user);
+                document.getElementById('welcomeUser').textContent = user.name;
+                
+                // Show/hide admin section based on role
+                const adminSection = document.getElementById('adminSection');
+                const adminAmountSection = document.getElementById('adminAmountSection');
+                const memberAmountSection = document.getElementById('memberAmountSection');
+                const storageInfo = document.getElementById('storageInfo');
+                const tabs = document.getElementById('dashboardTabs');
+                
+                // Update amount displays
+                document.getElementById('displayCurrentAmount').textContent = globalPaymentAmount;
+                document.getElementById('memberViewAmount').textContent = globalPaymentAmount;
+                
+                if (user.role === 'admin') {
+                    adminSection.style.display = 'block';
+                    adminAmountSection.style.display = 'block';
+                    memberAmountSection.style.display = 'none';
+                    storageInfo.style.display = 'flex';
+                    tabs.innerHTML = `
+                        <button class="tab active" onclick="switchTab('overview')" id="tab-overview">📊 Overview</button>
+                        <button class="tab" onclick="switchTab('payments')" id="tab-payments">💳 Payments</button>
+                        <button class="tab" onclick="switchTab('members')" id="tab-members">👥 Members</button>
+                    `;
+                } else {
+                    adminSection.style.display = 'none';
+                    adminAmountSection.style.display = 'none';
+                    memberAmountSection.style.display = 'block';
+                    storageInfo.style.display = 'none';
+                    tabs.innerHTML = `
+                        <button class="tab active" onclick="switchTab('overview')" id="tab-overview">📊 Overview</button>
+                        <button class="tab" onclick="switchTab('payments')" id="tab-payments">💳 My Payments</button>
+                    `;
+                }
+                
+                // Switch views
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                
+                // Reset to overview tab
+                switchTab('overview');
+                renderOverview();
+                
+                showToast('success', 'Welcome!', `Logged in as ${user.role === 'admin' ? 'Admin' : 'Society Member'}`);
+            } else {
+                showToast('error', 'Login Failed', 'Invalid username or password. Hint: Try admin / 123');
+                container.classList.add('shake');
+                setTimeout(() => container.classList.remove('shake'), 500);
+            }
+        });
+
+        // Add member form
+        document.getElementById('addMemberForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('newName').value.trim();
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value.trim();
+            const role = document.getElementById('newRole').value;
+            
+            if (!name || !username || !password) {
+                showToast('error', 'Error', 'Please fill all fields');
+                return;
+            }
+            
+            if (members.some(m => m.username === username)) {
+                showToast('error', 'Error', 'Username already exists');
+                return;
+            }
+            
+            const newMember = {
+                id: Date.now(),
+                name: name,
+                username: username,
+                password: hashPassword(password),
+                passwordVisible: obfuscatePassword(password),
+                role: role,
+                paid: false,
+                totalDue: globalPaymentAmount,
+                amountPaid: 0,
+                paymentHistory: []
+            };
+            
+            members.push(newMember);
+            
+            // Save to storage immediately after adding
+            saveMembersToStorage();
+            
+            renderMembers();
+            
+            // Reset form
+            document.getElementById('newName').value = '';
+            document.getElementById('newUsername').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('newRole').value = 'society';
+            
+            showToast('success', 'Member Added', `${name} has been saved and added as ${role === 'admin' ? 'Admin' : 'Society Member'}`);
+        });
+
+        // Close modal on overlay click
+        document.getElementById('paymentModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePaymentModal();
+            }
+        });
+
+        // Real-time validation
+        document.getElementById('username').addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('error');
+                document.getElementById('usernameError').classList.remove('show');
+            }
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('error');
+                document.getElementById('passwordError').classList.remove('show');
+            }
+        });
+
+        // Maintenance check on load
+        window.addEventListener('load', function() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            
+            if ((hours === 23 && minutes >= 55) || (hours === 0 && minutes <= 30)) {
+                showToast('error', 'Maintenance Notice', 'System maintenance in progress (11:55 PM - 12:30 AM)');
+            }
+        });
+    </script>
+</body>
+</html>
